@@ -3,8 +3,8 @@ let canvas = document.getElementById('canvas');
 let ctx;
 
 //Drawing variables
-let currentX = 0;
-let currentY = 0;
+let curX = 0;
+let curY = 0;
 
 function initCanvas(){
   canvas.width = window.innerWidth;
@@ -19,20 +19,14 @@ function initCanvas(){
 
 function drawMotorcycle() {
   drawHull();
-
-  //Draw shit
-  ctx.stroke();
-
-  // Front wheel
-  //ctx.arc(canvas.x, canvas.y, 50, 0, 2*Math.PI);
-  //ctx.stroke();
+  drawFrontWheel();
 }
 
 //Draw methods
 function drawHull(){
   // Hull
-  move(middleX-100, middleY);
   ctx.beginPath();
+  move(middleX-100, middleY);
   //Wheelcover(back)
   line(175, 0);
   line(0, -25);
@@ -56,25 +50,43 @@ function drawHull(){
   line(-75, 100);
   //Wheelcover(front)
   line(50, 0);
-  line(50, 20);
-  line(20, 45);
+  line(70, 65);
   ctx.closePath();
 
   ctx.fillStyle = 'purple';
   ctx.fill();
+  ctx.stroke();
+}
+
+function drawFrontWheel(){
+  //Connection to Hull
+  ctx.beginPath();
+  move(-37, -35);
+  line(-50, 45);
+  line(-5, -5);
+  line(50, -45);
+  ctx.closePath();
+  ctx.stroke();
+
+  //Wheel
+  ctx.beginPath();
+  move(-50, 45);
+  ctx.arc(curX, curY, 60, 0, 2*Math.PI);
+  ctx.stroke();
+
 }
 
 //Functional methods
 function move(x, y){
-  currentX = x;
-  currentY = y;
-  ctx.moveTo(currentX, currentY);
+  curX += x;
+  curY += y;
+  ctx.moveTo(curX, curY);
 }
 
 function line(x, y){
-  currentX += x;
-  currentY += y;
-  ctx.lineTo(currentX, currentY);
+  curX += x;
+  curY += y;
+  ctx.lineTo(curX, curY);
 }
 
 //Method calls
