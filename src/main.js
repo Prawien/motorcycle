@@ -18,6 +18,18 @@ function initCanvas(){
 }
 
 function drawMotorcycle() {
+  drawHull();
+
+  //Draw shit
+  ctx.stroke();
+
+  // Front wheel
+  //ctx.arc(canvas.x, canvas.y, 50, 0, 2*Math.PI);
+  //ctx.stroke();
+}
+
+//Draw methods
+function drawHull(){
   // Hull
   move(middleX-100, middleY);
   ctx.beginPath();
@@ -50,15 +62,7 @@ function drawMotorcycle() {
 
   ctx.fillStyle = 'purple';
   ctx.fill();
-
-  ctx.stroke();
-
-  // Front wheel
-  //ctx.arc(canvas.x, canvas.y, 50, 0, 2*Math.PI);
-  //ctx.stroke();
 }
-
-//Draw methods
 
 //Functional methods
 function move(x, y){
