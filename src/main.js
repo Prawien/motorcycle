@@ -123,11 +123,9 @@ class Motorcycle {
     ctx.fillStyle = 'gray';
     ctx.fill();
     ctx.stroke();
-    //Wheel 1
+    //Wheels
     ctx.beginPath();
     this.move(-48, 47);
-    wheel1.update();
-    wheel2.update();
     
     //Connection to Hull 2
     ctx.beginPath();
@@ -139,6 +137,9 @@ class Motorcycle {
     ctx.fillStyle = 'gray';
     ctx.fill();
     ctx.stroke();
+
+    wheel1.update();
+    wheel2.update();
 
     this.reset();
   };
@@ -178,6 +179,12 @@ class Wheel {
     ctx.lineWidth = 3;
     ctx.stroke();
     ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r/2, 0, TWO_PI);
+    ctx.fillStyle = 'gray';
+    ctx.stroke();
+    ctx.fill();
 
     for(let i = 0; i < 6; i++){
       ctx.beginPath();
