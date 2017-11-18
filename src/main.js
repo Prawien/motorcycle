@@ -14,7 +14,9 @@ const hold = new Hold({
   element: canvas,
   duration: 3,
   onProgress: progress => {
-    if (speed < 40) {
+    if (speed < 20){
+      speed += (5 * progress)/60;
+    } else if (speed >= 20 && speed < 40) {
       speed += (1 * progress)/60;
     } else {
       speed;
@@ -58,8 +60,6 @@ function loop(){
 function update(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   motor1.draw();
-  //wheel1.update();
-  //wheel2.update();
 }
 
 //Classes
@@ -174,6 +174,7 @@ class Wheel {
   draw(){
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, TWO_PI);
+    ctx.lineWidth = 3;
     ctx.stroke();
     ctx.closePath();
 
