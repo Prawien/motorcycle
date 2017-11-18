@@ -14,10 +14,10 @@ const hold = new Hold({
   element: canvas,
   duration: 3,
   onProgress: progress => {
-    if (progress < 0.6) {
-      speed += progress;
+    if (speed < 40) {
+      speed += (1 * progress)/60;
     } else {
-      speed -= 2;
+      speed;
     }
   }
 });
