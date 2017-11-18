@@ -5,6 +5,7 @@ const TWO_PI = Math.PI * 2;
 
 let time = 0;
 const timeStep = (1/60);
+let motor1;
 let wheel1;
 let wheel2;
 
@@ -17,7 +18,7 @@ function initCanvas(){
   middleY = canvas.height / 2;
   ctx = canvas.getContext('2d');
 
-  new Motorcycle(middleX, middleY);
+  motor1 = new Motorcycle(middleX, middleY);
 }
 
 window.requestAnimFrame = (function(){ 
@@ -42,13 +43,16 @@ function loop(){
 
 function update(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  wheel1.update();
+  motor1.draw();
+  //wheel1.update();
   //wheel2.update();
 }
 
 //Classes
 class Motorcycle {
   constructor(x, y){
+    this.oriX = x;
+    this.oriY = y;
     this.x = x;
     this.y = y;
 
@@ -78,12 +82,8 @@ class Motorcycle {
       [50, 0],
       [70, 65],
     ];
-    this.wheelcon1 = [
-      [-50, 45],
-      [-5, -5],
-      [50, -45]
-    ]
-
+    wheel1 = new Wheel(this.x-90, this.y+7, 60);
+    wheel2 = new Wheel(this.x+250, this.y+7, 60);
     this.draw();
   }
 
@@ -111,7 +111,8 @@ class Motorcycle {
     //Wheel 1
     ctx.beginPath();
     this.move(-48, 47);
-    wheel1 = new Wheel(this.x, this.y, 60);
+    wheel1.update();
+    wheel2.update();
     
     //Connection to Hull 2
     ctx.beginPath();
@@ -123,6 +124,8 @@ class Motorcycle {
     ctx.fillStyle = 'gray';
     ctx.fill();
     ctx.stroke();
+
+    this.reset();
   };
   move(x, y){
     this.x += x;
@@ -134,6 +137,10 @@ class Motorcycle {
     this.y += y;
     ctx.lineTo(this.x, this.y);
   };
+  reset(){
+    this.x = this.oriX;
+    this.y = this.oriY;
+  }
 }
 
 class Wheel {
@@ -141,48 +148,37 @@ class Wheel {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.draw(x, y, r);
+
+    this.dotX = x;
+    this.dotY = y;
+    this.dotR = 5;
+    this.angle = 0;
+    this.speed = 2;
+
+    this.delayX = 0;
+    this.delayY = 0;
+
+    this.draw();
   }
-  draw(x = this.x, y = this.y, r = this.r, step = 0){
-    //1
+  draw(){
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI/6)+step);
-    this.line(0, 0);
-    ctx.closePath();
+    ctx.arc(this.x, this.y, this.r, 0, TWO_PI);
     ctx.stroke();
-    //2
+    ctx.closePath();
+
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, ((TWO_PI/6)*2)+step);
-    this.line(0, 0);
-    ctx.closePath();
-    ctx.stroke();
-    //3
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, ((TWO_PI/6)*3)+step);
-    this.line(0, 0);
-    ctx.closePath();
-    ctx.stroke();
-    //4
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, ((TWO_PI/6)*4)+step);
-    this.line(0, 0);
-    ctx.closePath();
-    ctx.stroke();
-    //5
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, ((TWO_PI/6)*5)+step);
-    this.line(0, 0);
-    ctx.closePath();
-    ctx.stroke();
-    //6
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI+step));
-    this.line(0, 0);
-    ctx.closePath();
-    ctx.stroke();
+    ctx.arc(this.dotX, this.dotY, this.dotR, 0, TWO_PI);
+    ctx.arc(this.delayX, this.delayY, this.dotR, 0, TWO_PI);
+    ctx.fillStyle = 'lightgreen';
+    ctx.fill();
   }
   update(){
-    this.draw(this.x, this.y, this.r, time);
+    this.angle -= this.speed;
+    this.dotX = (this.r - this.dotR*4) * Math.cos(this.angle * Math.PI / 180) + this.x;
+    this.dotY = (this.r - this.dotR*4) * Math.sin(this.angle * Math.PI / 180) + this.y;
+    this.delayX = (this.r - this.dotR*4) * Math.cos(this.angle-2 * Math.PI / 180) + this.x;
+    this.delayY = (this.r - this.dotR*4) * Math.sin(this.angle-2 * Math.PI / 180) + this.y;
+    this.draw();
   }
   line(x, y){
     this.x += x;
