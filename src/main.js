@@ -8,16 +8,18 @@ const timeStep = (1/60);
 let motor1;
 let wheel1;
 let wheel2;
-let speed = 2;
+const baseSpeed = 2;
+let speed = baseSpeed;
+const maxSpeed = 40;
 
 const hold = new Hold({
   element: canvas,
-  duration: 3,
+  duration: 5,
   onProgress: progress => {
-    if (speed < 20){
-      speed += (5 * progress)/60;
-    } else if (speed >= 20 && speed < 40) {
-      speed += (1 * progress)/60;
+    if (progress < 0.3){
+      speed = baseSpeed + (maxSpeed * progress);
+    } else if (progress >= 0.3 && progress <= 1) {
+      speed = baseSpeed + (maxSpeed * progress);
     } else {
       speed;
     }
