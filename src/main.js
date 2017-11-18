@@ -3,7 +3,12 @@ let canvas = document.getElementById('canvas');
 let ctx;
 const TWO_PI = Math.PI * 2;
 
-//Init
+let time = 0;
+const timeStep = (1/60);
+let wheel1;
+let wheel2;
+
+//Main functions
 function initCanvas(){
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -13,6 +18,32 @@ function initCanvas(){
   ctx = canvas.getContext('2d');
 
   new Motorcycle(middleX, middleY);
+}
+
+window.requestAnimFrame = (function(){ 
+  return  window.requestAnimationFrame   ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame    ||
+    function(callback){
+      window.setTimeout(callback, 1000);
+    };
+})();
+
+window.onload = function(){
+  initCanvas();
+  loop();
+}
+
+function loop(){
+  update();
+  time += timeStep;
+  requestAnimFrame(loop);
+}
+
+function update(){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  wheel1.update();
+  //wheel2.update();
 }
 
 //Classes
@@ -80,7 +111,7 @@ class Motorcycle {
     //Wheel 1
     ctx.beginPath();
     this.move(-48, 47);
-    new Wheel(this.x, this.y, 60);
+    wheel1 = new Wheel(this.x, this.y, 60);
     
     //Connection to Hull 2
     ctx.beginPath();
@@ -109,49 +140,53 @@ class Wheel {
   constructor(x, y, r){
     this.x = x;
     this.y = y;
+    this.r = r;
+    this.draw(x, y, r);
+  }
+  draw(x = this.x, y = this.y, r = this.r, step = 0){
     //1
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, TWO_PI/6);
+    ctx.arc(x, y, r, 0, (TWO_PI/6)+step);
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
     //2
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI/6)*2);
+    ctx.arc(x, y, r, 0, ((TWO_PI/6)*2)+step);
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
     //3
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI/6)*3);
+    ctx.arc(x, y, r, 0, ((TWO_PI/6)*3)+step);
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
     //4
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI/6)*4);
+    ctx.arc(x, y, r, 0, ((TWO_PI/6)*4)+step);
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
     //5
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, (TWO_PI/6)*5);
+    ctx.arc(x, y, r, 0, ((TWO_PI/6)*5)+step);
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
     //6
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, TWO_PI);
+    ctx.arc(x, y, r, 0, (TWO_PI+step));
     this.line(0, 0);
     ctx.closePath();
     ctx.stroke();
+  }
+  update(){
+    this.draw(this.x, this.y, this.r, time);
   }
   line(x, y){
     this.x += x;
     this.y += y;
     ctx.lineTo(this.x, this.y);
-  };
+  }
 }
-
-//Functional methods
-initCanvas();
