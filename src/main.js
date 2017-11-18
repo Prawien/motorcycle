@@ -8,9 +8,9 @@ const timeStep = (1/60);
 let motor1;
 let wheel1;
 let wheel2;
-const baseSpeed = 2;
+const baseSpeed = 5;
 let speed = baseSpeed;
-const maxSpeed = 40;
+const maxSpeed = 35;
 
 const hold = new Hold({
   element: canvas,
