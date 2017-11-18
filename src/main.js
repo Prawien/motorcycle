@@ -149,8 +149,6 @@ class Wheel {
     this.y = y;
     this.r = r;
 
-    this.dotX = x;
-    this.dotY = y;
     this.dotR = 5;
     this.angle = 0;
     this.speed = 2;
@@ -166,19 +164,22 @@ class Wheel {
     ctx.stroke();
     ctx.closePath();
 
-    ctx.beginPath();
-    ctx.arc(this.dotX, this.dotY, this.dotR, 0, TWO_PI);
-    ctx.arc(this.delayX, this.delayY, this.dotR, 0, TWO_PI);
-    ctx.fillStyle = 'lightgreen';
-    ctx.fill();
+    for(let i = 0; i < 6; i++){
+      ctx.beginPath();
+      ctx.arc(this.getDotX(i), this.getDotY(i), this.dotR, 0, TWO_PI);
+      ctx.fillStyle = 'lightgreen';
+      ctx.fill();
+    }
   }
   update(){
     this.angle -= this.speed;
-    this.dotX = (this.r - this.dotR*4) * Math.cos(this.angle * Math.PI / 180) + this.x;
-    this.dotY = (this.r - this.dotR*4) * Math.sin(this.angle * Math.PI / 180) + this.y;
-    this.delayX = (this.r - this.dotR*4) * Math.cos(this.angle-2 * Math.PI / 180) + this.x;
-    this.delayY = (this.r - this.dotR*4) * Math.sin(this.angle-2 * Math.PI / 180) + this.y;
     this.draw();
+  }
+  getDotX(num){
+    return (this.r - this.dotR*4) * Math.cos((this.angle-(60*num)) * Math.PI / 180) + this.x;
+  }
+  getDotY(num){
+    return (this.r - this.dotR*4) * Math.sin((this.angle-(60*num)) * Math.PI / 180) + this.y;
   }
   line(x, y){
     this.x += x;
