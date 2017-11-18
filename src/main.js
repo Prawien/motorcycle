@@ -56,7 +56,6 @@ function loop(){
   update();
   time += timeStep;
   requestAnimFrame(loop);
-  console.log(speed);
 }
 
 function update(){
