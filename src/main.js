@@ -176,10 +176,10 @@ class Wheel {
     this.draw();
   }
   getDotX(num){
-    return (this.r - this.dotR*4) * Math.cos((this.angle-(60*num)) * Math.PI / 180) + this.x;
+    return (this.r - this.dotR*2) * Math.cos((this.angle-(60*num)) * Math.PI / 180) + this.x;
   }
   getDotY(num){
-    return (this.r - this.dotR*4) * Math.sin((this.angle-(60*num)) * Math.PI / 180) + this.y;
+    return (this.r - this.dotR*2) * Math.sin((this.angle-(60*num)) * Math.PI / 180) + this.y;
   }
   line(x, y){
     this.x += x;
