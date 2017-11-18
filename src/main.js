@@ -8,6 +8,19 @@ const timeStep = (1/60);
 let motor1;
 let wheel1;
 let wheel2;
+let speed = 2;
+
+const hold = new Hold({
+  element: canvas,
+  duration: 3,
+  onProgress: progress => {
+    if (progress < 0.6) {
+      speed += progress;
+    } else {
+      speed -= 2;
+    }
+  }
+});
 
 //Main functions
 function initCanvas(){
@@ -39,6 +52,7 @@ function loop(){
   update();
   time += timeStep;
   requestAnimFrame(loop);
+  console.log(speed);
 }
 
 function update(){
@@ -151,7 +165,6 @@ class Wheel {
 
     this.dotR = 5;
     this.angle = 0;
-    this.speed = 2;
 
     this.delayX = 0;
     this.delayY = 0;
@@ -172,7 +185,7 @@ class Wheel {
     }
   }
   update(){
-    this.angle -= this.speed;
+    this.angle -= speed;
     this.draw();
   }
   getDotX(num){
