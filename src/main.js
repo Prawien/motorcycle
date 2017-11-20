@@ -5,12 +5,17 @@ const TWO_PI = Math.PI * 2;
 
 let time = 0;
 const timeStep = (1/60);
-let motor1;
-let wheel1;
-let wheel2;
 const baseSpeed = 5;
 let speed = baseSpeed;
 const maxSpeed = 35;
+const roadWidth = 4500;
+
+let road;
+let motor1;
+let wheel1;
+let wheel2;
+
+
 
 const hold = new Hold({
   element: canvas,
@@ -36,6 +41,7 @@ function initCanvas(){
   ctx = canvas.getContext('2d');
 
   motor1 = new Motorcycle(middleX, middleY);
+  road = new Road(middleX, middleY+100);
 }
 
 window.requestAnimFrame = (function(){ 
@@ -61,6 +67,7 @@ function loop(){
 function update(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   motor1.draw();
+  road.update();
 }
 
 //Classes
@@ -207,5 +214,54 @@ class Wheel {
     this.x += x;
     this.y += y;
     ctx.lineTo(this.x, this.y);
+  }
+}
+
+class Road {
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.inBetween = 500;
+    this.amount = this.calcAmount();
+    this.stripes = [];
+
+    this.draw();
+  }
+  draw(){
+    for(let i = 0;i < this.amount; i++){
+      const curStripe = new RoadStripe((i*this.inBetween), this.y);
+      this.stripes.push(curStripe);
+    }
+  }
+  update(){
+    for(let i = 0;i < this.stripes.length;i++){
+      this.stripes[i].update();
+    }
+  }
+  calcAmount(){
+    let curAmount = 1 + (roadWidth / this.inBetween);
+    return Math.floor(curAmount);
+  }
+}
+
+class RoadStripe {
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.width = 100;
+    this.height = 30;
+
+    this.draw();
+  }
+  draw(){
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
+  }
+  update(){
+    if(this.x >= roadWidth){
+      this.x -= roadWidth + 500;
+    } else {
+      this.x += 3 * speed;
+    }
+    this.draw();
   }
 }
