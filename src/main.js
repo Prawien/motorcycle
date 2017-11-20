@@ -10,12 +10,11 @@ let speed = baseSpeed;
 const maxSpeed = 35;
 const roadWidth = 4500;
 
+let gauge;
 let road;
 let motor1;
 let wheel1;
 let wheel2;
-
-
 
 const hold = new Hold({
   element: canvas,
@@ -42,6 +41,7 @@ function initCanvas(){
 
   motor1 = new Motorcycle(middleX, middleY);
   road = new Road(middleX, middleY+100);
+  gauge = new Gauge(25, 70);
 }
 
 window.requestAnimFrame = (function(){ 
@@ -68,6 +68,7 @@ function update(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   motor1.draw();
   road.update();
+  gauge.update();
 }
 
 //Classes
@@ -263,5 +264,36 @@ class RoadStripe {
       this.x += 3 * speed;
     }
     this.draw();
+  }
+}
+
+class Gauge {
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.spd = this.calcSpd();
+    this.twitch = false;
+
+    this.draw();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.font ='50pt Arial';
+    ctx.fillText(this.spd, this.x, this.y);
+    ctx.fillText('km/h', this.x+150, this.y);
+  }
+  update(){
+    this.spd = this.calcSpd();
+    this.draw();
+  }
+  calcSpd(){
+    let curSpd = Math.floor((speed * 5));
+    if(this.twitch && curSpd === 200){
+      this.twitch = false;
+      return curSpd+1;
+    } else {
+      this.twitch = true;
+      return curSpd;
+    }
   }
 }
