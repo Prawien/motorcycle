@@ -56,6 +56,9 @@ window.requestAnimFrame = (function(){
 window.onload = function(){
   initCanvas();
   loop();
+  window.addEventListener("resize", () => {
+    initCanvas();
+  });
 }
 
 function loop(){
@@ -65,7 +68,9 @@ function loop(){
 }
 
 function update(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255,255,255, 0.2)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   motor1.draw();
   road.update();
   gauge.update();
@@ -279,6 +284,7 @@ class Gauge {
   draw(){
     ctx.beginPath();
     ctx.font ='50pt Arial';
+    ctx.fillStyle = 'black';
     ctx.fillText(this.spd, this.x, this.y);
     ctx.fillText('km/h', this.x+150, this.y);
   }
